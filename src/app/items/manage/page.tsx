@@ -46,7 +46,7 @@ export default function ManageItemsPage() {
       const res = await fetch(`${SERVER_URL}/api/products/${productId}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${typeof document !== "undefined" ? (document.cookie.match(/better-auth\.session_token=([^;]+)/)?.[1] ?? "") : ""}`,
+          Authorization: `Bearer ${typeof document !== "undefined" ? (document.cookie.match(/(?:__Secure-)?better-auth\.session_token=([^;]+)/)?.[1] ?? "") : ""}`,
         },
         credentials: "include",
       });

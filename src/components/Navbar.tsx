@@ -86,11 +86,7 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  /* Close mobile menu on route change */
-  useEffect(() => {
-    setIsMenuOpen(false);
-    setIsDropdownOpen(false);
-  }, [pathname]);
+  /* Close mobile menu on route change is handled by Next.js or clicking links */
 
   const handleSignOut = async () => {
     try {

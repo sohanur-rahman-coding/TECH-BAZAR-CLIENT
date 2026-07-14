@@ -46,7 +46,7 @@ const slides: SlideData[] = [
 ];
 
 export default function BannerSlider() {
-  const autoplay = useRef(
+  const [autoplay] = useState(() =>
     Autoplay({
       delay: 4500,
       stopOnInteraction: false,
@@ -54,7 +54,7 @@ export default function BannerSlider() {
     })
   );
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplay.current]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplay]);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const onSelect = useCallback(() => {

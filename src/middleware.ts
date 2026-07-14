@@ -3,8 +3,10 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   // Check better-auth session token in cookies
-  // Better-auth session cookies are typically named "better-auth.session_token"
-  const sessionToken = request.cookies.get("better-auth.session_token")?.value;
+  // Better-auth session cookies are typically named "better-auth.session_token" or "__Secure-better-auth.session_token" in prod
+  const sessionToken = 
+    request.cookies.get("better-auth.session_token")?.value || 
+    request.cookies.get("__Secure-better-auth.session_token")?.value;
 
   const { pathname } = request.nextUrl;
 
