@@ -3,7 +3,6 @@ dns.setServers(["1.1.1.1", "1.0.0.1"]);
 import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { jwt } from "better-auth/plugins";
 
 const mongoUri = process.env.MONGODB_URI;
 if (!mongoUri) {
@@ -39,11 +38,6 @@ export const auth = betterAuth({
     },
   },
   session: {
-    cookieCache: {
-      enabled: true,
-      strategy: "jwt",
-      maxAge: 60 * 24 * 60,
-    },
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
   },
-  plugins: [jwt()],
 });

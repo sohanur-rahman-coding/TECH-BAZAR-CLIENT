@@ -29,6 +29,7 @@ export interface Product {
   createdAt: string;
   views: number;
   reviews: Review[];
+  status?: "available" | "sold";
 }
 
 export interface CategoryStat {

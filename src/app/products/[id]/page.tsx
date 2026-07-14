@@ -93,7 +93,7 @@ export default function ProductDetailsPage({ params }: PageProps) {
       return;
     }
     
-    if (session.user.id === product?.sellerId) {
+    if (session.user.id === product?.userId) {
       toast.error("You cannot buy your own product.");
       return;
     }

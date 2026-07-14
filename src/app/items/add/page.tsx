@@ -19,7 +19,7 @@ export default function AddItemPage() {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const role = (user as any)?.role as string | undefined;
-  const isSeller = role === "seller" || role === "admin";
+  const isSeller = role === "seller";
 
   // Form Fields State
   const [title, setTitle] = useState("");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle, ArrowRight, Loader2, Award } from "lucide-react";
 import Link from "next/link";
@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 const SERVER_URL = "/api/backend";
 
-export default function PricingSuccessPage() {
+function PricingSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams?.get("session_id");
@@ -104,5 +104,17 @@ export default function PricingSuccessPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function PricingSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-[70vh] flex flex-col items-center justify-center text-slate-400">
+        <Loader2 className="animate-spin mb-4 text-violet-500" size={48} />
+      </div>
+    }>
+      <PricingSuccessContent />
+    </Suspense>
   );
 }

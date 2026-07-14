@@ -69,7 +69,8 @@ const Navbar = () => {
   const user = session?.user;
   // Read role stored by better-auth (server stores it on the user document)
   const role = (user as any)?.role as string | undefined;
-  const isSeller = role === "seller" || role === "admin";
+  const isAdmin = role === "admin";
+  const isSeller = role === "seller";
 
   /* Close dropdown on outside click */
   useEffect(() => {
@@ -177,8 +178,8 @@ const Navbar = () => {
               </li>
             ))}
 
-            {/* Seller-only desktop links */}
-            {user && isSeller &&
+            {/* Seller & Admin desktop links */}
+            {user && (isSeller || isAdmin) &&
               sellerNavLinks.map((link) => (
                 <li key={link.href}>
                   <Link
@@ -235,7 +236,7 @@ const Navbar = () => {
                       {user.name.split(" ")[0]}
                     </p>
                     <p className="text-[10px] text-slate-500 capitalize leading-tight">
-                      {isSeller ? "Seller" : "Buyer"}
+                      {isAdmin ? "Admin" : isSeller ? "Seller" : "Buyer"}
                     </p>
                   </div>
                   <ChevronDown
@@ -258,12 +259,14 @@ const Navbar = () => {
                         <p className="text-[11px] text-slate-400 truncate">{user.email}</p>
                         <span
                           className={`mt-1 inline-flex w-fit text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
-                            isSeller
+                            isAdmin 
+                              ? "bg-rose-950/60 text-rose-300 border-rose-800/50"
+                              : isSeller
                               ? "bg-violet-950/60 text-violet-300 border-violet-800/50"
                               : "bg-emerald-950/60 text-emerald-300 border-emerald-800/50"
                           }`}
                         >
-                          {isSeller ? "⚡ Seller" : "🛍 Buyer"}
+                          {isAdmin ? "👑 Admin" : isSeller ? "⚡ Seller" : "🛍 Buyer"}
                         </span>
                       </div>
                     </div>
@@ -370,8 +373,8 @@ const Navbar = () => {
                 <div className="min-w-0">
                   <p className="text-sm font-bold text-slate-100 truncate">{user.name}</p>
                   <p className="text-[11px] text-slate-400 truncate">{user.email}</p>
-                  <span className={`text-[9px] font-bold uppercase ${isSeller ? "text-violet-400" : "text-emerald-400"}`}>
-                    {isSeller ? "⚡ Seller Account" : "🛍 Buyer Account"}
+                  <span className={`text-[9px] font-bold uppercase ${isAdmin ? "text-rose-400" : isSeller ? "text-violet-400" : "text-emerald-400"}`}>
+                    {isAdmin ? "👑 Admin Account" : isSeller ? "⚡ Seller Account" : "🛍 Buyer Account"}
                   </span>
                 </div>
               </div>
@@ -392,30 +395,34 @@ const Navbar = () => {
                 </li>
               ))}
 
-              {/* Seller-only mobile links */}
-              {user && isSeller && (
+              {/* Seller & Admin mobile links */}
+              {user && (isSeller || isAdmin) && (
                 <>
                   <li className="pt-2">
-                    <p className="px-3 pb-1 text-[10px] font-bold uppercase text-slate-600 tracking-widest">Seller Tools</p>
+                    <p className="px-3 pb-1 text-[10px] font-bold uppercase text-slate-600 tracking-widest">{isAdmin ? "Admin Tools" : "Seller Tools"}</p>
                   </li>
-                  <li>
-                    <Link
-                      href="/items/add"
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-900 hover:text-violet-400 transition ${isActive("/items/add") ? "bg-slate-900/50 text-violet-400" : "text-slate-300"}`}
-                    >
-                      <BiPlusCircle /> <span>Add Item</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/items/manage"
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-900 hover:text-violet-400 transition ${isActive("/items/manage") ? "bg-slate-900/50 text-violet-400" : "text-slate-300"}`}
-                    >
-                      <BiListUl /> <span>Manage Listings</span>
-                    </Link>
-                  </li>
+                  {isSeller && (
+                    <>
+                      <li>
+                        <Link
+                          href="/items/add"
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-900 hover:text-violet-400 transition ${isActive("/items/add") ? "bg-slate-900/50 text-violet-400" : "text-slate-300"}`}
+                        >
+                          <BiPlusCircle /> <span>Add Item</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/items/manage"
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`flex items-center gap-2.5 py-2.5 px-3 rounded-xl hover:bg-slate-900 hover:text-violet-400 transition ${isActive("/items/manage") ? "bg-slate-900/50 text-violet-400" : "text-slate-300"}`}
+                        >
+                          <BiListUl /> <span>Manage Listings</span>
+                        </Link>
+                      </li>
+                    </>
+                  )}
                   <li>
                     <Link
                       href="/dashboard"
