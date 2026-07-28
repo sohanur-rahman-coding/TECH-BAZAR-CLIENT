@@ -1,6 +1,7 @@
 # Tech Bazaar 🚀
 
 Tech Bazaar is a premium, modern marketplace for buying and selling electronics. This platform connects buyers looking for top-tier gadgets with verified sellers, facilitating seamless hardware transactions with Stripe escrow payments, powerful analytics, and role-based dashboards.
+Live link : https://tech-bazaar-starter-client.vercel.app/
 
 ## ✨ Features
 
