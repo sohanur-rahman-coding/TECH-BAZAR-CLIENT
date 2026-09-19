@@ -4,6 +4,7 @@ import { FaFacebook } from "react-icons/fa";
 import { BsInstagram, BsTwitter } from "react-icons/bs";
 import { LiaLinkedin } from "react-icons/lia";
 import React from "react";
+import Image from "next/image";
 
 const footerLinks = {
   shop: [
@@ -29,16 +30,15 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="relative h-9 w-9 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md shadow-violet-500/20 overflow-hidden flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect width="16" height="16" x="4" y="4" rx="2" />
-                  <rect width="6" height="6" x="9" y="9" rx="1" />
-                  <path d="M15 2v2" /><path d="M15 20v2" />
-                  <path d="M2 15h2" /><path d="M2 9h2" />
-                  <path d="M20 15h2" /><path d="M20 9h2" />
-                  <path d="M9 2v2" /><path d="M9 20v2" />
-                </svg>
-              </div>
+               <div className="relative flex ">
+                          <Image
+                            src="/transparent-background.png" // public ফোল্ডারের ইমেজ পাথ
+                            alt="Logo"
+                            width={40}
+                            height={40}
+                            className="z-10 object-contain"
+                          />
+                        </div>
               <p className="font-black text-lg tracking-tight bg-gradient-to-r from-violet-600 to-violet-400 dark:from-slate-100 dark:to-violet-400 bg-clip-text text-transparent">
                 Tech Bazaar
               </p>
