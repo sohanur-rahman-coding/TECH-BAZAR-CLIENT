@@ -145,7 +145,7 @@ export default function Home() {
   return (
     <div className="space-y-20">
       
-      {/* 1. Hero Carousel */}
+      {/* 1. Hero 3D Carousel */}
       <section className="relative">
         <BannerSlider />
       </section>
@@ -153,10 +153,10 @@ export default function Home() {
       {/* 2. Categories Section */}
       <section className="space-y-6">
         <div className="text-center max-w-xl mx-auto space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-100 uppercase tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">
             Browse by Category
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             Find specialized devices sorted by hardware configurations.
           </p>
         </div>
@@ -164,11 +164,11 @@ export default function Home() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {categories.map((cat, idx) => (
             <Link key={idx} href={cat.href}>
-              <div className="flex flex-col items-center justify-center p-6 bg-slate-900/30 border border-slate-800 rounded-2xl text-center group hover:border-violet-500/50 hover:bg-slate-900/60 transition duration-300 h-full">
-                <div className="p-4 bg-slate-950 rounded-2xl text-violet-400 group-hover:text-violet-300 group-hover:scale-110 transition duration-300 border border-slate-800 shadow-md">
+              <div className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 rounded-2xl text-center group hover:border-violet-500/50 hover:bg-slate-100 dark:hover:bg-slate-900/60 transition duration-300 h-full shadow-sm">
+                <div className="p-4 bg-white dark:bg-slate-950 rounded-2xl text-violet-600 dark:text-violet-400 group-hover:scale-110 transition duration-300 border border-slate-200 dark:border-slate-800 shadow-sm">
                   {cat.icon}
                 </div>
-                <h3 className="font-bold text-slate-200 mt-4 group-hover:text-violet-400 transition">
+                <h3 className="font-bold text-slate-900 dark:text-slate-200 mt-4 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition">
                   {cat.name}
                 </h3>
                 <span className="text-[10px] text-slate-500 mt-1 uppercase font-medium">{cat.count}</span>
@@ -180,16 +180,16 @@ export default function Home() {
 
       {/* 3. Featured Products Section */}
       <section className="space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-900 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-900 pb-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-100 uppercase tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">
               Featured Highlights
             </h2>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
               Top reviewed and recently listed hardware on Tech Bazaar.
             </p>
           </div>
-          <Link href="/products" className="group flex items-center gap-1.5 text-sm font-semibold text-violet-400 hover:text-violet-300">
+          <Link href="/products" className="group flex items-center gap-1.5 text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
             <span>Explore All</span>
             <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
           </Link>
@@ -202,11 +202,11 @@ export default function Home() {
             ))}
           </div>
         ) : featuredProducts.length === 0 ? (
-          <div className="text-center py-16 bg-slate-900/10 border border-slate-850 rounded-3xl">
-            <TrendingUp className="h-12 w-12 text-slate-600 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-300">No Featured Gadgets Found</h3>
-            <p className="text-xs text-slate-500 mt-1 mb-6">Be the first to list a premium tech gadget!</p>
-            <Link href="/items/add">
+          <div className="text-center py-16 bg-slate-50 dark:bg-slate-900/10 border border-slate-200 dark:border-slate-850 rounded-3xl space-y-4">
+            <TrendingUp className="h-12 w-12 text-slate-400 dark:text-slate-600 mx-auto" />
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-300">No Featured Gadgets Found</h3>
+            <p className="text-xs text-slate-500">Be the first to list a premium tech gadget!</p>
+            <Link href="/dashboard/items/add">
               <button className="bg-violet-600 hover:bg-violet-500 text-xs font-bold text-white px-5 py-2.5 rounded-xl cursor-pointer">
                 Create Listing
               </button>
@@ -222,12 +222,12 @@ export default function Home() {
       </section>
 
       {/* 4. Stats Section */}
-      <section className="bg-gradient-to-r from-violet-950/20 via-slate-900/30 to-violet-950/20 border border-slate-800/80 rounded-3xl p-8 md:p-12">
+      <section className="bg-gradient-to-r from-violet-600/10 via-slate-100 to-indigo-600/10 dark:from-violet-950/20 dark:via-slate-900/30 dark:to-violet-950/20 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-8 md:p-12 shadow-sm">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((stat, idx) => (
             <div key={idx} className="text-center space-y-2">
-              <span className="block text-3xl md:text-4xl font-extrabold text-violet-400">{stat.value}</span>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">{stat.label}</h3>
+              <span className="block text-3xl md:text-4xl font-extrabold text-violet-600 dark:text-violet-400">{stat.value}</span>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200">{stat.label}</h3>
               <p className="text-[11px] text-slate-500">{stat.detail}</p>
             </div>
           ))}
@@ -237,22 +237,22 @@ export default function Home() {
       {/* 5. Benefits Section */}
       <section className="space-y-8">
         <div className="text-center max-w-xl mx-auto space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-100 uppercase tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">
             Designed for Tech Trade
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             A comprehensive trade system custom-built for high-end electronics.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {benefits.map((benefit, idx) => (
-            <div key={idx} className="flex flex-col p-6 bg-slate-900/20 border border-slate-800/60 rounded-2xl shadow-sm hover:border-violet-500/30 transition-all duration-300">
-              <div className="p-3 bg-slate-950 rounded-xl w-fit border border-slate-800 shadow-sm mb-4">
+            <div key={idx} className="flex flex-col p-6 bg-slate-50 dark:bg-slate-900/20 border border-slate-200 dark:border-slate-800/60 rounded-2xl shadow-sm hover:border-violet-500/30 transition-all duration-300">
+              <div className="p-3 bg-white dark:bg-slate-950 rounded-xl w-fit border border-slate-200 dark:border-slate-800 shadow-sm mb-4 text-violet-600 dark:text-violet-400">
                 {benefit.icon}
               </div>
-              <h3 className="font-bold text-slate-200 text-base mb-2">{benefit.title}</h3>
-              <p className="text-xs text-slate-450 leading-relaxed">{benefit.description}</p>
+              <h3 className="font-bold text-slate-900 dark:text-slate-200 text-base mb-2">{benefit.title}</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-450 leading-relaxed">{benefit.description}</p>
             </div>
           ))}
         </div>
@@ -261,39 +261,39 @@ export default function Home() {
       {/* 6. Testimonials Section */}
       <section className="space-y-8">
         <div className="text-center max-w-xl mx-auto space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-100 uppercase tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">
             Trust & Customer Success
           </h2>
-          <p className="text-sm text-slate-400">
-            See how buyers and sellers rates their platform experiences.
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            See how buyers and sellers rate their platform experiences.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((test, idx) => (
-            <div key={idx} className="bg-slate-900/30 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-sm">
+            <div key={idx} className="bg-slate-50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-sm">
               <div className="space-y-4">
                 <div className="flex gap-0.5">
                   {Array.from({ length: test.rating }).map((_, i) => (
                     <Star key={i} size={14} className="fill-amber-400 text-amber-400" />
                   ))}
                   {Array.from({ length: 5 - test.rating }).map((_, i) => (
-                    <Star key={i} size={14} className="text-slate-700" />
+                    <Star key={i} size={14} className="text-slate-300 dark:text-slate-700" />
                   ))}
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed italic">
+                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed italic">
                   "{test.content}"
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 mt-6 border-t border-slate-800/50 pt-4">
+              <div className="flex items-center gap-3 mt-6 border-t border-slate-200 dark:border-slate-800/50 pt-4">
                 <img
                   src={test.avatar}
                   alt={test.name}
-                  className="h-9 w-9 rounded-full object-cover border border-slate-800"
+                  className="h-9 w-9 rounded-full object-cover border border-slate-300 dark:border-slate-800"
                 />
                 <div>
-                  <h4 className="text-xs font-bold text-slate-200">{test.name}</h4>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-slate-200">{test.name}</h4>
                   <span className="text-[10px] text-slate-500 uppercase font-semibold">{test.role}</span>
                 </div>
               </div>
@@ -305,18 +305,18 @@ export default function Home() {
       {/* 7. Blogs Section */}
       <section className="space-y-8">
         <div className="text-center max-w-xl mx-auto space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-100 uppercase tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">
             Bazaar Insights & Tech News
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             Guides, trends and tutorials written by hardware professionals.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {blogs.map((blog, idx) => (
-            <div key={idx} className="group bg-slate-900/20 border border-slate-800 hover:border-violet-500/30 rounded-2xl overflow-hidden transition-all duration-300">
-              <div className="relative aspect-video w-full overflow-hidden bg-slate-950 border-b border-slate-800">
+            <div key={idx} className="group bg-slate-50 dark:bg-slate-900/20 border border-slate-200 dark:border-slate-800 hover:border-violet-500/30 rounded-2xl overflow-hidden transition-all duration-300 shadow-sm">
+              <div className="relative aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
                 <img
                   src={blog.image}
                   alt={blog.title}
@@ -325,14 +325,14 @@ export default function Home() {
               </div>
               <div className="p-5 space-y-3">
                 <div className="flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                  <span className="text-violet-400">{blog.category}</span>
+                  <span className="text-violet-600 dark:text-violet-400">{blog.category}</span>
                   <span>{blog.date}</span>
                 </div>
-                <h3 className="font-bold text-sm text-slate-200 leading-snug group-hover:text-violet-400 transition-colors line-clamp-2">
+                <h3 className="font-bold text-sm text-slate-900 dark:text-slate-200 leading-snug group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">
                   {blog.title}
                 </h3>
                 <div className="pt-2">
-                  <span className="text-xs font-semibold text-slate-300 group-hover:text-violet-400 transition flex items-center gap-1">
+                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition flex items-center gap-1">
                     <span>Read Article</span>
                     <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
                   </span>
@@ -346,41 +346,41 @@ export default function Home() {
       {/* 8. FAQ Section */}
       <section className="space-y-8 max-w-3xl mx-auto">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-100 uppercase tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tight">
             Frequently Answered FAQ
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             Answers to common questions about trade operations.
           </p>
         </div>
 
         <div className="space-y-4">
-          <details className="group bg-slate-900/20 border border-slate-800 rounded-2xl p-5 cursor-pointer">
-            <summary className="font-bold text-sm text-slate-200 flex justify-between items-center list-none">
+          <details className="group bg-slate-50 dark:bg-slate-900/20 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 cursor-pointer shadow-sm">
+            <summary className="font-bold text-sm text-slate-900 dark:text-slate-200 flex justify-between items-center list-none">
               <span>How does the escrow buyer protection plan work?</span>
-              <span className="transition duration-300 group-open:rotate-180 text-violet-400">+</span>
+              <span className="transition duration-300 group-open:rotate-180 text-violet-600 dark:text-violet-400">+</span>
             </summary>
-            <p className="text-xs text-slate-400 leading-relaxed mt-3 pt-3 border-t border-slate-800/40">
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mt-3 pt-3 border-t border-slate-200 dark:border-slate-800/40">
               When a buyer purchases an item, their payment is secured in Tech Bazaar's escrow holding. The seller ships the gadget. Once delivered, the buyer has 48 hours to inspect the item. After inspection confirmation, the funds are released to the seller.
             </p>
           </details>
 
-          <details className="group bg-slate-900/20 border border-slate-800 rounded-2xl p-5 cursor-pointer">
-            <summary className="font-bold text-sm text-slate-200 flex justify-between items-center list-none">
+          <details className="group bg-slate-50 dark:bg-slate-900/20 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 cursor-pointer shadow-sm">
+            <summary className="font-bold text-sm text-slate-900 dark:text-slate-200 flex justify-between items-center list-none">
               <span>Can I edit or delete my gadgets after listing them?</span>
-              <span className="transition duration-300 group-open:rotate-180 text-violet-400">+</span>
+              <span className="transition duration-300 group-open:rotate-180 text-violet-600 dark:text-violet-400">+</span>
             </summary>
-            <p className="text-xs text-slate-400 leading-relaxed mt-3 pt-3 border-t border-slate-800/40">
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mt-3 pt-3 border-t border-slate-200 dark:border-slate-800/40">
               Yes, absolutely. By navigating to the "Manage Listings" page, you can see all your listed products. You can edit parameters (price, specifications, photos) or delete the listing entirely at any time.
             </p>
           </details>
 
-          <details className="group bg-slate-900/20 border border-slate-800 rounded-2xl p-5 cursor-pointer">
-            <summary className="font-bold text-sm text-slate-200 flex justify-between items-center list-none">
+          <details className="group bg-slate-50 dark:bg-slate-900/20 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 cursor-pointer shadow-sm">
+            <summary className="font-bold text-sm text-slate-900 dark:text-slate-200 flex justify-between items-center list-none">
               <span>Are there listing fees on Tech Bazaar?</span>
-              <span className="transition duration-300 group-open:rotate-180 text-violet-400">+</span>
+              <span className="transition duration-300 group-open:rotate-180 text-violet-600 dark:text-violet-400">+</span>
             </summary>
-            <p className="text-xs text-slate-400 leading-relaxed mt-3 pt-3 border-t border-slate-800/40">
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mt-3 pt-3 border-t border-slate-200 dark:border-slate-800/40">
               Basic listings are 100% free of charge. We offer premium subscription plans for pro sellers who want unlimited listings, analytics dashboards, and highlighted category placements.
             </p>
           </details>
@@ -388,18 +388,18 @@ export default function Home() {
       </section>
 
       {/* 9. Newsletter Section */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-900/60 via-slate-900 to-slate-950 border border-slate-800 p-8 sm:p-12 md:p-16 text-center space-y-6">
-        <div className="absolute top-0 right-0 h-40 w-40 bg-violet-600/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-40 w-40 bg-violet-600/10 rounded-full blur-3xl" />
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 via-indigo-600 to-purple-700 dark:from-violet-950 dark:via-indigo-950 dark:to-slate-950 border border-violet-500/30 dark:border-violet-800/40 p-8 sm:p-12 md:p-16 text-center space-y-6 shadow-xl">
+        <div className="absolute top-0 right-0 h-40 w-40 bg-white/10 dark:bg-violet-500/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 h-40 w-40 bg-white/10 dark:bg-indigo-500/20 rounded-full blur-3xl" />
         
         <div className="max-w-xl mx-auto space-y-3 relative z-10">
-          <span className="text-[10px] font-bold text-violet-400 uppercase tracking-widest bg-violet-500/10 px-3 py-1 rounded-full border border-violet-500/20">
+          <span className="text-[10px] font-bold text-white uppercase tracking-widest bg-white/20 dark:bg-violet-500/20 px-3 py-1 rounded-full border border-white/30 dark:border-violet-400/30">
             Newsletter
           </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-100 tracking-tight leading-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
             Never Miss Out on Tech Deals
           </h2>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+          <p className="text-xs sm:text-sm text-violet-100 dark:text-violet-200 leading-relaxed">
             Subscribe to our weekly dispatch of newly added items, price drops, and member-exclusive discount alerts.
           </p>
         </div>
@@ -410,11 +410,11 @@ export default function Home() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email address"
-            className="flex-grow bg-slate-950 border border-slate-800 focus:border-violet-500 rounded-xl px-4 py-3 text-xs text-slate-100 placeholder-slate-500 focus:outline-none transition"
+            className="flex-grow bg-white/95 dark:bg-slate-900/90 border border-white/30 dark:border-violet-500/40 focus:border-white dark:focus:border-violet-400 rounded-xl px-4 py-3 text-xs text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-violet-300/60 focus:outline-none transition shadow-md"
           />
           <button
             type="submit"
-            className="bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-xl px-6 py-3 text-xs transition duration-200 shadow-md shadow-violet-900/20 flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+            className="bg-slate-900 hover:bg-slate-800 dark:bg-violet-600 dark:hover:bg-violet-500 text-white font-bold rounded-xl px-6 py-3 text-xs transition duration-200 shadow-lg shadow-black/20 dark:shadow-violet-900/40 flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
           >
             <Send size={14} />
             <span>Subscribe</span>

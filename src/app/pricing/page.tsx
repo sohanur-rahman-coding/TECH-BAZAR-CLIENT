@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { loadStripe } from "@stripe/stripe-js";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 import {
   Check,
   Zap,
@@ -22,12 +23,10 @@ import {
 const SERVER_URL = "/api/backend";
 const STRIPE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "";
 
-/* ─── Load Stripe once (outside component) ─── */
 const stripePromise = STRIPE_KEY && STRIPE_KEY !== "pk_test_YOUR_PUBLISHABLE_KEY_HERE"
   ? loadStripe(STRIPE_KEY)
   : null;
 
-/* ─── Plan definitions ─── */
 const plans = [
   {
     key: "starter",
@@ -36,7 +35,8 @@ const plans = [
     period: "/month",
     description: "Perfect for new sellers starting their tech listing journey.",
     icon: <Zap className="h-5 w-5" />,
-    color: "from-violet-600 to-purple-600",
+    gradient: "from-violet-500 to-purple-600",
+    shadowColor: "shadow-violet-500/20",
     popular: false,
     features: [
       "Up to 50 product listings",
@@ -54,7 +54,8 @@ const plans = [
     period: "/month",
     description: "For growing businesses that need more reach and visibility.",
     icon: <Crown className="h-5 w-5" />,
-    color: "from-violet-500 to-indigo-500",
+    gradient: "from-violet-600 to-indigo-600",
+    shadowColor: "shadow-violet-600/30",
     popular: true,
     features: [
       "Unlimited product listings",
@@ -73,7 +74,8 @@ const plans = [
     period: "",
     description: "For brands and large-scale electronics businesses.",
     icon: <Building2 className="h-5 w-5" />,
-    color: "from-slate-600 to-slate-700",
+    gradient: "from-slate-600 to-slate-700",
+    shadowColor: "shadow-slate-500/20",
     popular: false,
     features: [
       "Everything in Professional",
@@ -89,28 +91,27 @@ const plans = [
 
 const benefits = [
   {
-    icon: <ShieldCheck className="h-6 w-6 text-violet-400" />,
+    icon: <ShieldCheck className="h-6 w-6 text-violet-600 dark:text-violet-400" />,
     title: "Secure Escrow",
     desc: "Every transaction protected by our built-in escrow payment system.",
   },
   {
-    icon: <BarChart3 className="h-6 w-6 text-violet-400" />,
+    icon: <BarChart3 className="h-6 w-6 text-violet-600 dark:text-violet-400" />,
     title: "Rich Analytics",
     desc: "Track listing views, category performance, and revenue trends.",
   },
   {
-    icon: <Users className="h-6 w-6 text-violet-400" />,
+    icon: <Users className="h-6 w-6 text-violet-600 dark:text-violet-400" />,
     title: "24K+ Buyers",
     desc: "Access a growing marketplace of verified electronics buyers.",
   },
   {
-    icon: <Package className="h-6 w-6 text-violet-400" />,
+    icon: <Package className="h-6 w-6 text-violet-600 dark:text-violet-400" />,
     title: "Smart Inventory",
     desc: "Manage, update, and organize all listings from one dashboard.",
   },
 ];
 
-/* ─── Success / Cancel Banners ─── */
 function StatusBanner() {
   const searchParams = useSearchParams();
   const success = searchParams.get("success");
@@ -119,7 +120,7 @@ function StatusBanner() {
 
   if (success) {
     return (
-      <div className="flex items-center gap-3 bg-emerald-950/40 border border-emerald-700/40 text-emerald-300 rounded-2xl px-5 py-4 text-sm font-semibold">
+      <div className="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-700/40 text-emerald-700 dark:text-emerald-300 rounded-2xl px-5 py-4 text-sm font-semibold">
         <Check className="h-5 w-5 flex-shrink-0" />
         <span>
           🎉 Payment successful! Your <strong className="capitalize">{plan || "seller"}</strong> plan is now active.
@@ -131,7 +132,7 @@ function StatusBanner() {
 
   if (canceled) {
     return (
-      <div className="flex items-center gap-3 bg-slate-900 border border-slate-700 text-slate-300 rounded-2xl px-5 py-4 text-sm">
+      <div className="flex items-center gap-3 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-2xl px-5 py-4 text-sm">
         Payment was canceled. Choose a plan below to get started.
       </div>
     );
@@ -140,14 +141,21 @@ function StatusBanner() {
   return null;
 }
 
-/* ─── Pricing Inner (uses useSearchParams) ─── */
+const fadeUp: any = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" },
+  }),
+};
+
 function PricingContent() {
   const { data: session } = authClient.useSession();
   const user = session?.user;
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [stripeConfigured, setStripeConfigured] = useState(true);
 
-  /* Check if Stripe is configured on mount */
   useEffect(() => {
     fetch(`${SERVER_URL}/api/payments/config`)
       .then((r) => r.json())
@@ -160,35 +168,22 @@ function PricingContent() {
       toast.error("Please sign in to subscribe to a plan.");
       return;
     }
-
     if (!stripeConfigured || !stripePromise) {
-      toast.error(
-        "Stripe is not configured yet. Add your STRIPE_SECRET_KEY to the server .env file.",
-        { duration: 5000 }
-      );
+      toast.error("Stripe is not configured yet. Add your STRIPE_SECRET_KEY to the server .env file.", { duration: 5000 });
       return;
     }
-
     setLoadingPlan(planKey);
     const toastId = toast.loading("Redirecting to secure checkout...");
-
     try {
       const res = await fetch(`${SERVER_URL}/api/payments/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          planKey,
-          userEmail: user.email,
-        }),
+        body: JSON.stringify({ planKey, userEmail: user.email }),
         credentials: "include",
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Checkout failed");
-
       toast.dismiss(toastId);
-
-      /* Redirect to Stripe hosted checkout */
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -201,33 +196,43 @@ function PricingContent() {
   };
 
   return (
-    <main className="space-y-20 py-6">
+    <main className="space-y-24 py-6">
       {/* ── Hero ── */}
-      <section className="text-center space-y-5 max-w-3xl mx-auto">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-1.5 text-xs font-semibold text-violet-400 uppercase tracking-wider">
-          <Sparkles size={12} />
-          Seller Plans
-        </span>
+      <section className="text-center space-y-6 max-w-3xl mx-auto">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider">
+            <Sparkles size={12} />
+            Seller Plans
+          </span>
+        </motion.div>
 
-        <h1 className="text-3xl sm:text-5xl font-black tracking-tight uppercase text-slate-100 leading-tight">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="text-3xl sm:text-5xl font-black tracking-tight uppercase text-slate-900 dark:text-slate-100 leading-tight"
+        >
           Grow Your Business
-          <span className="block bg-gradient-to-r from-white to-violet-400 bg-clip-text text-transparent mt-2">
+          <span className="block bg-gradient-to-r from-violet-600 to-indigo-500 dark:from-violet-400 dark:to-indigo-300 bg-clip-text text-transparent mt-2">
             Sell to Thousands
           </span>
-        </h1>
+        </motion.h1>
 
-        <p className="text-sm text-slate-400 leading-relaxed">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl mx-auto"
+        >
           Start selling on Tech Bazaar and reach active electronics buyers. Secure payments, powerful analytics, and full seller tools included.
-        </p>
+        </motion.p>
 
-        {/* Stripe not configured banner */}
         {!stripeConfigured && (
-          <div className="flex items-center gap-2 justify-center bg-amber-950/30 border border-amber-700/40 text-amber-300 rounded-xl px-4 py-3 text-xs font-medium">
-            ⚠️ Stripe payments not configured — add your keys to the server <code className="bg-black/20 px-1 rounded">.env</code> file to enable checkout.
+          <div className="flex items-center gap-2 justify-center bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-700/40 text-amber-700 dark:text-amber-300 rounded-xl px-4 py-3 text-xs font-medium">
+            ⚠️ Stripe payments not configured — add your keys to the server <code className="bg-amber-100 dark:bg-black/20 px-1 rounded">.env</code> file to enable checkout.
           </div>
         )}
 
-        {/* Status banners from Stripe redirect */}
         <Suspense fallback={null}>
           <StatusBanner />
         </Suspense>
@@ -236,61 +241,60 @@ function PricingContent() {
       {/* ── Pricing Cards ── */}
       <section>
         <div className="grid gap-8 lg:grid-cols-3">
-          {plans.map((plan) => (
-            <div
+          {plans.map((plan, i) => (
+            <motion.div
               key={plan.key}
-              className={`relative rounded-3xl border bg-slate-900/30 p-8 shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col ${
+              custom={i}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              whileHover={{ y: -8, transition: { duration: 0.2 } }}
+              className={`relative rounded-3xl border bg-white dark:bg-slate-900/50 backdrop-blur-sm p-8 shadow-lg transition-shadow duration-300 flex flex-col ${
                 plan.popular
-                  ? "border-violet-500 ring-2 ring-violet-500/10 shadow-violet-900/20"
-                  : "border-slate-800"
+                  ? "border-violet-500 ring-2 ring-violet-500/20 shadow-violet-500/10"
+                  : "border-slate-200 dark:border-slate-800 hover:border-violet-400/50 dark:hover:border-violet-500/40"
               }`}
             >
-              {/* Popular badge */}
               {plan.popular && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-1 text-[10px] uppercase font-bold tracking-widest text-white shadow-md shadow-violet-900/30">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-1 text-[10px] uppercase font-bold tracking-widest text-white shadow-md shadow-violet-500/30">
                   ⭐ Most Popular
                 </div>
               )}
 
-              {/* Plan icon */}
-              <div
-                className={`inline-flex p-3 rounded-2xl bg-gradient-to-br ${plan.color} mb-5 w-fit shadow-lg`}
-              >
+              <div className={`inline-flex p-3 rounded-2xl bg-gradient-to-br ${plan.gradient} mb-5 w-fit shadow-lg ${plan.shadowColor}`}>
                 <div className="text-white">{plan.icon}</div>
               </div>
 
-              <h3 className="text-xl font-bold text-slate-100 uppercase tracking-tight">{plan.name}</h3>
-              <p className="mt-2 text-xs text-slate-400 leading-relaxed flex-grow">{plan.description}</p>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 uppercase tracking-tight">{plan.name}</h3>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400 leading-relaxed flex-grow">{plan.description}</p>
 
-              {/* Price */}
               <div className="mt-6 mb-8">
-                <span className="text-4xl font-extrabold text-slate-100">{plan.price}</span>
+                <span className="text-4xl font-extrabold text-slate-900 dark:text-slate-100">{plan.price}</span>
                 {plan.period && (
-                  <span className="text-xs text-slate-500 font-semibold ml-1">{plan.period}</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-500 font-semibold ml-1">{plan.period}</span>
                 )}
               </div>
 
-              {/* Features */}
-              <ul className="space-y-3 border-t border-slate-800/60 pt-6 mb-8">
+              <ul className="space-y-3 border-t border-slate-200 dark:border-slate-800/60 pt-6 mb-8">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2.5 text-xs text-slate-400">
-                    <Check className="h-4 w-4 text-violet-400 flex-shrink-0 mt-0.5" />
+                  <li key={feature} className="flex items-start gap-2.5 text-xs text-slate-600 dark:text-slate-400">
+                    <Check className="h-4 w-4 text-violet-500 dark:text-violet-400 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
                   </li>
                 ))}
               </ul>
 
-              {/* CTA Button */}
               {plan.key === "enterprise" ? (
                 <a
                   href="mailto:support@techbazaar.com?subject=Enterprise Plan Inquiry"
-                  className="block w-full text-center text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 py-3.5 rounded-2xl transition duration-200 cursor-pointer active:scale-95 border border-slate-700"
+                  className="block w-full text-center text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 py-3.5 rounded-2xl transition duration-200 cursor-pointer active:scale-95 border border-slate-200 dark:border-slate-700"
                 >
                   Contact Sales →
                 </a>
               ) : !user ? (
                 <Link href="/signin" className="block">
-                  <button className="w-full text-xs font-bold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 py-3.5 rounded-2xl transition duration-200 shadow-md shadow-violet-900/30 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5">
+                  <button className="w-full text-xs font-bold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 py-3.5 rounded-2xl transition duration-200 shadow-md shadow-violet-500/20 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5">
                     <span>Sign In to Subscribe</span>
                     <ArrowRight size={14} />
                   </button>
@@ -301,8 +305,8 @@ function PricingContent() {
                   disabled={loadingPlan === plan.key}
                   className={`w-full text-xs font-bold text-white py-3.5 rounded-2xl transition duration-200 shadow-md cursor-pointer active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 ${
                     plan.popular
-                      ? "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 shadow-violet-900/30"
-                      : "bg-violet-600 hover:bg-violet-500 shadow-violet-900/20"
+                      ? "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 shadow-violet-500/20"
+                      : "bg-violet-600 hover:bg-violet-500 shadow-violet-500/10"
                   }`}
                 >
                   {loadingPlan === plan.key ? (
@@ -321,36 +325,41 @@ function PricingContent() {
                   )}
                 </button>
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
 
       {/* ── Benefits ── */}
-      <section className="border-t border-slate-900 pt-16 space-y-10">
-        <h2 className="text-center text-xl sm:text-2xl font-black uppercase text-slate-200 tracking-tight">
+      <section className="border-t border-slate-200 dark:border-slate-800 pt-16 space-y-10">
+        <h2 className="text-center text-xl sm:text-2xl font-black uppercase text-slate-900 dark:text-slate-100 tracking-tight">
           Why Sell With Tech Bazaar?
         </h2>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {benefits.map((b) => (
-            <div
+          {benefits.map((b, i) => (
+            <motion.div
               key={b.title}
-              className="rounded-2xl border border-slate-800 bg-slate-900/10 p-6 space-y-3 hover:border-violet-500/30 transition duration-300"
+              custom={i}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/20 p-6 space-y-3 hover:border-violet-500/40 dark:hover:border-violet-500/30 hover:shadow-md transition duration-300"
             >
-              <div className="p-3 bg-slate-950 rounded-xl w-fit border border-slate-800">
+              <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl w-fit border border-slate-200 dark:border-slate-800">
                 {b.icon}
               </div>
-              <h3 className="font-bold text-slate-200 text-sm">{b.title}</h3>
-              <p className="text-xs text-slate-450 leading-relaxed">{b.desc}</p>
-            </div>
+              <h3 className="font-bold text-slate-900 dark:text-slate-200 text-sm">{b.title}</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{b.desc}</p>
+            </motion.div>
           ))}
         </div>
       </section>
 
       {/* ── FAQ ── */}
       <section className="max-w-2xl mx-auto space-y-4">
-        <h2 className="text-center text-xl font-black uppercase text-slate-200 tracking-tight">FAQ</h2>
+        <h2 className="text-center text-xl font-black uppercase text-slate-900 dark:text-slate-100 tracking-tight">FAQ</h2>
 
         {[
           {
@@ -369,44 +378,49 @@ function PricingContent() {
             q: "Can I switch plans later?",
             a: "Absolutely. You can upgrade or downgrade your plan at any time. Prorated charges apply when upgrading.",
           },
-        ].map((item) => (
-          <details
+        ].map((item, i) => (
+          <motion.details
             key={item.q}
-            className="group bg-slate-900/20 border border-slate-800 rounded-2xl p-5 cursor-pointer"
+            custom={i}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="group bg-white dark:bg-slate-900/20 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 cursor-pointer hover:border-violet-400/50 dark:hover:border-violet-500/30 transition duration-200"
           >
-            <summary className="font-bold text-sm text-slate-200 flex justify-between items-center list-none">
+            <summary className="font-bold text-sm text-slate-900 dark:text-slate-200 flex justify-between items-center list-none">
               <span>{item.q}</span>
-              <span className="transition duration-300 group-open:rotate-45 text-violet-400 text-xl leading-none">+</span>
+              <span className="transition duration-300 group-open:rotate-45 text-violet-600 dark:text-violet-400 text-xl leading-none">+</span>
             </summary>
-            <p className="text-xs text-slate-400 leading-relaxed mt-3 pt-3 border-t border-slate-800/40">
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mt-3 pt-3 border-t border-slate-200 dark:border-slate-800/40">
               {item.a}
             </p>
-          </details>
+          </motion.details>
         ))}
       </section>
 
       {/* ── Bottom CTA ── */}
       <section className="max-w-4xl mx-auto">
-        <div className="rounded-3xl border border-slate-800 bg-gradient-to-br from-violet-950/30 via-slate-900/30 to-slate-950 p-10 text-center space-y-5 relative overflow-hidden">
-          <div className="absolute top-0 right-0 h-48 w-48 bg-violet-600/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 h-48 w-48 bg-violet-600/10 rounded-full blur-3xl" />
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-violet-950/30 dark:via-slate-900/30 dark:to-slate-950 p-10 text-center space-y-5 relative overflow-hidden shadow-xl shadow-violet-500/5">
+          <div className="absolute top-0 right-0 h-48 w-48 bg-violet-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-48 w-48 bg-indigo-500/10 rounded-full blur-3xl" />
 
           <div className="relative z-10 space-y-4">
-            <h2 className="text-2xl font-black uppercase text-slate-100 tracking-tight">
+            <h2 className="text-2xl font-black uppercase text-slate-900 dark:text-slate-100 tracking-tight">
               Ready to Start Selling?
             </h2>
-            <p className="text-xs text-slate-400 max-w-xl mx-auto">
+            <p className="text-xs text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
               Join thousands of verified sellers already growing their electronics business on Tech Bazaar.
             </p>
             {!user ? (
-              <div className="flex gap-3 justify-center">
+              <div className="flex gap-3 justify-center flex-wrap">
                 <Link href="/signup">
-                  <button className="bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-xl px-8 py-3 text-xs transition duration-200 shadow-md shadow-violet-900/20 cursor-pointer active:scale-95">
+                  <button className="bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-xl px-8 py-3 text-xs transition duration-200 shadow-md shadow-violet-500/20 cursor-pointer active:scale-95">
                     Create Seller Account
                   </button>
                 </Link>
                 <Link href="/products">
-                  <button className="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl px-8 py-3 text-xs transition duration-200 cursor-pointer active:scale-95">
+                  <button className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold rounded-xl px-8 py-3 text-xs transition duration-200 cursor-pointer active:scale-95 border border-slate-200 dark:border-slate-700">
                     Browse Products
                   </button>
                 </Link>
@@ -415,7 +429,7 @@ function PricingContent() {
               <button
                 onClick={() => handleSubscribe("professional")}
                 disabled={!!loadingPlan}
-                className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold rounded-xl px-8 py-3 text-xs transition duration-200 shadow-md shadow-violet-900/20 cursor-pointer active:scale-95 disabled:opacity-60"
+                className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold rounded-xl px-8 py-3 text-xs transition duration-200 shadow-md shadow-violet-500/20 cursor-pointer active:scale-95 disabled:opacity-60"
               >
                 Get Professional Plan — $14/mo
               </button>
@@ -427,16 +441,15 @@ function PricingContent() {
   );
 }
 
-/* ─── Page wrapper with Suspense for useSearchParams ─── */
 export default function PricingPage() {
   return (
     <Suspense fallback={
       <div className="space-y-8 py-6 animate-pulse max-w-5xl mx-auto">
-        <div className="h-10 bg-slate-900 rounded w-1/3 mx-auto" />
+        <div className="h-10 bg-slate-200 dark:bg-slate-900 rounded w-1/3 mx-auto" />
         <div className="grid grid-cols-3 gap-6">
-          <div className="h-96 bg-slate-900 rounded-3xl" />
-          <div className="h-96 bg-slate-900 rounded-3xl" />
-          <div className="h-96 bg-slate-900 rounded-3xl" />
+          <div className="h-96 bg-slate-100 dark:bg-slate-900 rounded-3xl" />
+          <div className="h-96 bg-slate-100 dark:bg-slate-900 rounded-3xl" />
+          <div className="h-96 bg-slate-100 dark:bg-slate-900 rounded-3xl" />
         </div>
       </div>
     }>

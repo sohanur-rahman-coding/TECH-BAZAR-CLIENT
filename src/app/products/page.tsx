@@ -139,25 +139,25 @@ function ExploreContent() {
     <div className="space-y-6">
       
       {/* Header and Search Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-900 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-850 pb-5">
         <div>
-          <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-100">Explore Gadgets</h1>
-          <p className="text-xs text-slate-400 mt-1">Browse, filter, and compare listings listed globally.</p>
+          <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-slate-100">Explore Gadgets</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Browse, filter, and compare listings listed globally.</p>
         </div>
 
         {/* Search Input Form */}
         <form onSubmit={handleSearchSubmit} className="flex gap-2 w-full md:max-w-md">
           <div className="relative flex-grow">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 h-4 w-4" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 h-4 w-4" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search product title, brand or description..."
-              className="w-full bg-slate-900 border border-slate-800 focus:border-violet-500 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none"
+              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-violet-500 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none shadow-sm"
             />
           </div>
-          <button type="submit" className="bg-violet-600 hover:bg-violet-500 text-xs font-bold text-white px-5 rounded-xl cursor-pointer transition">
+          <button type="submit" className="bg-violet-600 hover:bg-violet-500 text-xs font-bold text-white px-5 rounded-xl cursor-pointer transition shadow-sm">
             Search
           </button>
         </form>
@@ -167,15 +167,15 @@ function ExploreContent() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
         {/* LEFT COLUMN: Sidebar Filters (Desktop) */}
-        <div className="hidden lg:block space-y-6 bg-slate-900/10 border border-slate-900 rounded-2xl p-6 h-fit sticky top-20">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-900">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+        <div className="hidden lg:block space-y-6 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 h-fit sticky top-20 shadow-sm">
+          <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
               <SlidersHorizontal size={14} />
               <span>Filters</span>
             </span>
             <button
               onClick={handleClearFilters}
-              className="text-[10px] text-rose-400 hover:text-rose-350 font-bold uppercase flex items-center gap-1 transition cursor-pointer"
+              className="text-[10px] text-rose-500 dark:text-rose-400 hover:text-rose-600 font-bold uppercase flex items-center gap-1 transition cursor-pointer"
             >
               <Trash2 size={12} />
               <span>Reset</span>
@@ -184,12 +184,12 @@ function ExploreContent() {
 
           {/* Category Filter */}
           <div className="space-y-2.5">
-            <h3 className="text-xs font-bold uppercase text-slate-350 tracking-wide">Category</h3>
+            <h3 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wide">Category</h3>
             <div className="flex flex-col gap-1.5">
               <button
                 onClick={() => applyFilters({ category: "" })}
-                className={`text-left text-xs font-medium py-1 px-2.5 rounded-lg transition ${
-                  category === "" ? "bg-violet-600/10 text-violet-400 border border-violet-500/20" : "text-slate-400 hover:text-slate-200"
+                className={`text-left text-xs font-medium py-1.5 px-3 rounded-lg transition ${
+                  category === "" ? "bg-violet-600/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 font-semibold" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
                 }`}
               >
                 All Categories
@@ -198,8 +198,8 @@ function ExploreContent() {
                 <button
                   key={cat}
                   onClick={() => applyFilters({ category: cat })}
-                  className={`text-left text-xs font-medium py-1 px-2.5 rounded-lg transition ${
-                    category === cat ? "bg-violet-600/10 text-violet-400 border border-violet-500/20" : "text-slate-400 hover:text-slate-200"
+                  className={`text-left text-xs font-medium py-1.5 px-3 rounded-lg transition ${
+                    category === cat ? "bg-violet-600/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 font-semibold" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
                   }`}
                 >
                   {cat}
@@ -209,16 +209,16 @@ function ExploreContent() {
           </div>
 
           {/* Condition Filter */}
-          <div className="space-y-2.5 pt-4 border-t border-slate-900">
-            <h3 className="text-xs font-bold uppercase text-slate-350 tracking-wide">Condition</h3>
+          <div className="space-y-2.5 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <h3 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wide">Condition</h3>
             <div className="flex flex-col gap-2">
               {["new", "refurbished", "used"].map((cond) => (
-                <label key={cond} className="flex items-center gap-2.5 text-xs text-slate-400 cursor-pointer select-none">
+                <label key={cond} className="flex items-center gap-2.5 text-xs text-slate-600 dark:text-slate-400 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={selectedConditions.includes(cond)}
                     onChange={() => handleConditionChange(cond)}
-                    className="accent-violet-600 h-4 w-4 rounded border-slate-800"
+                    className="accent-violet-600 h-4 w-4 rounded border-slate-300 dark:border-slate-800"
                   />
                   <span className="capitalize">{cond}</span>
                 </label>
@@ -227,8 +227,8 @@ function ExploreContent() {
           </div>
 
           {/* Price Range Filter */}
-          <div className="space-y-2.5 pt-4 border-t border-slate-900">
-            <h3 className="text-xs font-bold uppercase text-slate-350 tracking-wide">Price Range ($)</h3>
+          <div className="space-y-2.5 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <h3 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wide">Price Range ($)</h3>
             <div className="flex gap-2">
               <input
                 type="number"
@@ -236,7 +236,7 @@ function ExploreContent() {
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
                 onBlur={() => applyFilters({ minPrice })}
-                className="w-1/2 bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:outline-none"
+                className="w-1/2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none"
               />
               <input
                 type="number"
@@ -244,21 +244,21 @@ function ExploreContent() {
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
                 onBlur={() => applyFilters({ maxPrice })}
-                className="w-1/2 bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:outline-none"
+                className="w-1/2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none"
               />
             </div>
           </div>
 
           {/* Rating Filter */}
-          <div className="space-y-2.5 pt-4 border-t border-slate-900">
-            <h3 className="text-xs font-bold uppercase text-slate-350 tracking-wide">Minimum Rating</h3>
+          <div className="space-y-2.5 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <h3 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wide">Minimum Rating</h3>
             <select
               value={minRating}
               onChange={(e) => {
                 setMinRating(e.target.value);
                 applyFilters({ minRating: e.target.value });
               }}
-              className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none"
+              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 text-xs text-slate-900 dark:text-slate-200 focus:outline-none"
             >
               <option value="">Any Rating</option>
               <option value="4.5">4.5+ Stars</option>
@@ -273,16 +273,16 @@ function ExploreContent() {
         <div className="lg:col-span-3 space-y-6">
           
           {/* Sorting & Result Counts Bar */}
-          <div className="flex items-center justify-between gap-4 bg-slate-900/10 border border-slate-900 p-4 rounded-2xl text-xs">
-            <span className="font-medium text-slate-450">
-              Showing <span className="text-slate-200 font-bold">{loading ? "..." : products.length}</span> of{" "}
-              <span className="text-slate-200 font-bold">{loading ? "..." : totalProducts}</span> products
+          <div className="flex items-center justify-between gap-4 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl text-xs shadow-sm">
+            <span className="font-medium text-slate-600 dark:text-slate-400">
+              Showing <span className="text-slate-900 dark:text-slate-200 font-bold">{loading ? "..." : products.length}</span> of{" "}
+              <span className="text-slate-900 dark:text-slate-200 font-bold">{loading ? "..." : totalProducts}</span> products
             </span>
 
             {/* Mobile Filter Toggle */}
             <button
               onClick={() => setShowMobileFilters(!showMobileFilters)}
-              className="lg:hidden flex items-center gap-1 bg-slate-800 text-slate-200 font-semibold px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer"
+              className="lg:hidden flex items-center gap-1 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer shadow-sm"
             >
               <SlidersHorizontal size={12} />
               <span>Filters</span>
@@ -299,7 +299,7 @@ function ExploreContent() {
                   setSortOrder(order);
                   applyFilters({ sortBy: field, sortOrder: order });
                 }}
-                className="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:outline-none"
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none"
               >
                 <option value="createdAt-desc">Newest First</option>
                 <option value="createdAt-asc">Oldest First</option>
@@ -313,22 +313,22 @@ function ExploreContent() {
 
           {/* MOBILE FILTERS DRAWER (Overlay) */}
           {showMobileFilters && (
-            <div className="lg:hidden bg-slate-900 border border-slate-850 p-6 rounded-2xl space-y-5 animate-in fade-in duration-200">
-              <div className="flex justify-between items-center pb-2 border-b border-slate-800">
-                <span className="font-bold text-xs uppercase tracking-wider text-slate-200">Filters</span>
+            <div className="lg:hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl space-y-5 shadow-lg animate-in fade-in duration-200">
+              <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-xs uppercase tracking-wider text-slate-900 dark:text-slate-200">Filters</span>
                 <div className="flex gap-4">
-                  <button onClick={handleClearFilters} className="text-[10px] text-rose-400 font-bold uppercase">Reset</button>
-                  <button onClick={() => setShowMobileFilters(false)} className="text-[10px] text-violet-400 font-bold uppercase">Close</button>
+                  <button onClick={handleClearFilters} className="text-[10px] text-rose-500 dark:text-rose-400 font-bold uppercase">Reset</button>
+                  <button onClick={() => setShowMobileFilters(false)} className="text-[10px] text-violet-600 dark:text-violet-400 font-bold uppercase">Close</button>
                 </div>
               </div>
 
               {/* Mobile Category */}
               <div className="space-y-1.5">
-                <span className="text-xs font-bold text-slate-400 uppercase">Category</span>
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Category</span>
                 <select
                   value={category}
                   onChange={(e) => applyFilters({ category: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-2 text-xs text-slate-900 dark:text-slate-200"
                 >
                   <option value="">All Categories</option>
                   {categoriesList.map(c => (
@@ -339,10 +339,10 @@ function ExploreContent() {
 
               {/* Mobile Condition */}
               <div className="space-y-2">
-                <span className="text-xs font-bold text-slate-400 uppercase">Condition</span>
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Condition</span>
                 <div className="flex gap-4">
                   {["new", "refurbished", "used"].map((cond) => (
-                    <label key={cond} className="flex items-center gap-2 text-xs text-slate-350">
+                    <label key={cond} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-350">
                       <input
                         type="checkbox"
                         checked={selectedConditions.includes(cond)}
@@ -356,7 +356,7 @@ function ExploreContent() {
 
               {/* Mobile Price */}
               <div className="space-y-2">
-                <span className="text-xs font-bold text-slate-400 uppercase">Price Range</span>
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Price Range</span>
                 <div className="flex gap-2">
                   <input
                     type="number"
@@ -364,7 +364,7 @@ function ExploreContent() {
                     value={minPrice}
                     onChange={(e) => setMinPrice(e.target.value)}
                     onBlur={() => applyFilters({ minPrice })}
-                    className="w-1/2 bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200"
+                    className="w-1/2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-2 text-xs text-slate-900 dark:text-slate-200"
                   />
                   <input
                     type="number"
@@ -372,7 +372,7 @@ function ExploreContent() {
                     value={maxPrice}
                     onChange={(e) => setMaxPrice(e.target.value)}
                     onBlur={() => applyFilters({ maxPrice })}
-                    className="w-1/2 bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200"
+                    className="w-1/2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-2 text-xs text-slate-900 dark:text-slate-200"
                   />
                 </div>
               </div>
@@ -387,9 +387,9 @@ function ExploreContent() {
               ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-20 bg-slate-900/10 border border-slate-900 rounded-3xl space-y-4">
-              <Inbox className="h-12 w-12 text-slate-700 mx-auto" />
-              <h3 className="text-lg font-bold text-slate-300">No Listings Found</h3>
+            <div className="text-center py-20 bg-slate-50 dark:bg-slate-900/10 border border-slate-200 dark:border-slate-900 rounded-3xl space-y-4">
+              <Inbox className="h-12 w-12 text-slate-400 dark:text-slate-700 mx-auto" />
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-300">No Listings Found</h3>
               <p className="text-xs text-slate-500 max-w-sm mx-auto">
                 No gadgets matched your specific filter properties. Try resetting the filters or broadening your search queries.
               </p>
@@ -410,11 +410,11 @@ function ExploreContent() {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 pt-6 border-t border-slate-900">
+            <div className="flex items-center justify-center gap-2 pt-6 border-t border-slate-200 dark:border-slate-900">
               <button
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1}
-                className="flex items-center gap-1 bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 px-3.5 py-2 rounded-xl text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer"
+                className="flex items-center gap-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-3.5 py-2 rounded-xl text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer shadow-sm"
               >
                 <ChevronLeft size={14} />
                 <span>Prev</span>
@@ -426,10 +426,10 @@ function ExploreContent() {
                   <button
                     key={pageNum}
                     onClick={() => handlePageChange(pageNum)}
-                    className={`h-9 w-9 flex items-center justify-center rounded-xl text-xs font-bold transition cursor-pointer ${
+                    className={`h-9 w-9 flex items-center justify-center rounded-xl text-xs font-bold transition cursor-pointer shadow-sm ${
                       page === pageNum
                         ? "bg-violet-600 text-white"
-                        : "bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-850"
+                        : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-850"
                     }`}
                   >
                     {pageNum}
@@ -440,7 +440,7 @@ function ExploreContent() {
               <button
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page === totalPages}
-                className="flex items-center gap-1 bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 px-3.5 py-2 rounded-xl text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer"
+                className="flex items-center gap-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-3.5 py-2 rounded-xl text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer shadow-sm"
               >
                 <span>Next</span>
                 <ChevronRight size={14} />

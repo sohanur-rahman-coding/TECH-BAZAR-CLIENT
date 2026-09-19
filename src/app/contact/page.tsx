@@ -59,13 +59,13 @@ export default function ContactPage() {
     <div className="space-y-12 py-6">
       {/* Hero */}
       <section className="text-center max-w-2xl mx-auto space-y-4">
-        <span className="inline-flex rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-1.5 text-xs font-semibold text-violet-400 uppercase tracking-wider">
+        <span className="inline-flex rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-1.5 text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider">
           Contact Us
         </span>
-        <h1 className="text-3xl sm:text-5xl font-black uppercase text-slate-100 tracking-tight">
+        <h1 className="text-3xl sm:text-5xl font-black uppercase text-slate-900 dark:text-slate-100 tracking-tight">
           Get in Touch
         </h1>
-        <p className="text-sm text-slate-400 leading-relaxed">
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
           Have questions about shipping, escrow verification, or pricing? Drop us a message, and our team will respond within 24 hours.
         </p>
       </section>
@@ -75,77 +75,77 @@ export default function ContactPage() {
         {/* Left Side: Contact Cards */}
         <div className="space-y-4">
           {contactInfos.map((info, idx) => (
-            <div key={idx} className="flex gap-4 p-5 bg-slate-900/20 border border-slate-800/80 rounded-2xl">
-              <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl h-fit text-violet-400">
+            <div key={idx} className="flex gap-4 p-5 bg-slate-50 dark:bg-slate-900/20 border border-slate-200 dark:border-slate-800/80 rounded-2xl shadow-sm">
+              <div className="p-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl h-fit text-violet-600 dark:text-violet-400 shadow-sm">
                 {info.icon}
               </div>
               <div className="space-y-1">
-                <h3 className="font-bold text-slate-350 text-xs uppercase tracking-wide">{info.title}</h3>
-                <p className="text-xs text-slate-200 font-semibold">{info.detail}</p>
+                <h3 className="font-bold text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wide">{info.title}</h3>
+                <p className="text-xs text-slate-900 dark:text-slate-200 font-semibold">{info.detail}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* Right Side: Message Form */}
-        <div className="lg:col-span-2 bg-slate-900/10 border border-slate-900 p-6 sm:p-8 rounded-3xl space-y-6">
-          <div className="flex items-center gap-2 border-b border-slate-900 pb-4">
-            <MessageSquare className="text-violet-500" />
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-200">Send an Inquiry</h2>
+        <div className="lg:col-span-2 bg-slate-50 dark:bg-slate-900/10 border border-slate-200 dark:border-slate-900 p-6 sm:p-8 rounded-3xl space-y-6 shadow-sm">
+          <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-900 pb-4">
+            <MessageSquare className="text-violet-600 dark:text-violet-400" />
+            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200">Send an Inquiry</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Name */}
               <div className="space-y-1">
-                <label className="block text-[10px] text-slate-500 uppercase font-semibold">Your Name</label>
+                <label className="block text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Your Name</label>
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="John Doe"
-                  className="w-full bg-slate-950 border border-slate-850 focus:border-violet-500 rounded-xl px-4 py-3 text-xs text-slate-200 focus:outline-none"
+                  className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-violet-500 rounded-xl px-4 py-3 text-xs text-slate-900 dark:text-slate-200 focus:outline-none shadow-sm"
                 />
               </div>
 
               {/* Email */}
               <div className="space-y-1">
-                <label className="block text-[10px] text-slate-500 uppercase font-semibold">Email Address</label>
+                <label className="block text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Email Address</label>
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="john@example.com"
-                  className="w-full bg-slate-950 border border-slate-850 focus:border-violet-500 rounded-xl px-4 py-3 text-xs text-slate-200 focus:outline-none"
+                  className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-violet-500 rounded-xl px-4 py-3 text-xs text-slate-900 dark:text-slate-200 focus:outline-none shadow-sm"
                 />
               </div>
             </div>
 
             {/* Subject */}
             <div className="space-y-1">
-              <label className="block text-[10px] text-slate-500 uppercase font-semibold">Subject</label>
+              <label className="block text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Subject</label>
               <input
                 type="text"
                 required
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="e.g. Escrow Dispute / Account Plan"
-                className="w-full bg-slate-950 border border-slate-850 focus:border-violet-500 rounded-xl px-4 py-3 text-xs text-slate-200 focus:outline-none"
+                className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-violet-500 rounded-xl px-4 py-3 text-xs text-slate-900 dark:text-slate-200 focus:outline-none shadow-sm"
               />
             </div>
 
             {/* Message Body */}
             <div className="space-y-1">
-              <label className="block text-[10px] text-slate-500 uppercase font-semibold">Message Body</label>
+              <label className="block text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Message Body</label>
               <textarea
                 required
                 rows={5}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Details of your inquiry..."
-                className="w-full bg-slate-950 border border-slate-850 focus:border-violet-500 rounded-xl p-4 text-xs text-slate-200 focus:outline-none resize-none"
+                className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-violet-500 rounded-xl p-4 text-xs text-slate-900 dark:text-slate-200 focus:outline-none resize-none shadow-sm"
               />
             </div>
 
@@ -154,7 +154,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-xl py-3.5 text-xs transition duration-200 shadow-md shadow-violet-900/20 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                className="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-xl py-3.5 text-xs transition duration-200 shadow-md shadow-violet-500/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
               >
                 <Send size={14} />
                 <span>{submitting ? "Sending Inquiry..." : "Submit Inquiry"}</span>
@@ -165,14 +165,14 @@ export default function ContactPage() {
       </div>
 
       {/* Map placeholder */}
-      <section className="border border-slate-900 rounded-3xl overflow-hidden h-64 bg-slate-950/40 relative">
+      <section className="border border-slate-200 dark:border-slate-900 rounded-3xl overflow-hidden h-64 bg-slate-100 dark:bg-slate-950/40 relative shadow-sm">
         <div className="absolute inset-0 bg-violet-900/5 mix-blend-color" />
         <div className="h-full w-full flex items-center justify-center flex-col text-center p-6 space-y-2">
-          <MapPin className="text-violet-500 h-8 w-8 animate-bounce" />
-          <h3 className="font-bold text-slate-200 text-sm">Interactive Map Location</h3>
+          <MapPin className="text-violet-600 dark:text-violet-400 h-8 w-8 animate-bounce" />
+          <h3 className="font-bold text-slate-900 dark:text-slate-200 text-sm">Interactive Map Location</h3>
           <p className="text-xs text-slate-500 max-w-xs">Gulshan Avenue, Circle-2, Dhaka 1212, Bangladesh</p>
           <div className="pt-2">
-            <span className="text-[10px] bg-slate-900 text-violet-400 font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-slate-800">
+            <span className="text-[10px] bg-white dark:bg-slate-900 text-violet-600 dark:text-violet-400 font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-slate-200 dark:border-slate-800 shadow-sm">
               Coordinates Locked
             </span>
           </div>

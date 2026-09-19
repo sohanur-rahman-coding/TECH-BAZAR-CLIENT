@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // Check better-auth session token in cookies
   // Better-auth session cookies are typically named "better-auth.session_token" or "__Secure-better-auth.session_token" in prod
   const sessionToken = 
@@ -12,8 +12,8 @@ export async function middleware(request: NextRequest) {
 
   // Protect listing addition, management, and dashboard
   const isProtectedPath =
-    pathname.startsWith("/items/add") ||
-    pathname.startsWith("/items/manage") ||
+    pathname.startsWith("/dashboard/items/add") ||
+    pathname.startsWith("/dashboard/items/manage") ||
     pathname.startsWith("/dashboard");
 
   if (isProtectedPath && !sessionToken) {
@@ -32,5 +32,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/items/add/:path*", "/items/manage/:path*", "/dashboard/:path*", "/login"],
+  matcher: ["/dashboard/items/add/:path*", "/dashboard/items/manage/:path*", "/dashboard/:path*", "/login"],
 };
