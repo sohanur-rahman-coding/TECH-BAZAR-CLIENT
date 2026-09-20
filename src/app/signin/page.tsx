@@ -18,27 +18,17 @@ export default function SignInPage() {
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
-    const toastId = toast.loading("Connecting to Google...");
     try {
-      // 1. Attempt Better-Auth Google Social Sign-In
-      const res = await authClient.signIn.social(
-        { provider: "google", callbackURL: "/dashboard" },
-        {
-          onError: (ctx) => {
-            console.warn("Google OAuth error:", ctx.error);
-          },
-        }
-      );
-
-      // 2. Fallback check: If not redirected after 1.2s, log in via Google Demo User
-      await new Promise((r) => setTimeout(r, 1200));
-      toast.dismiss(toastId);
-      await handleDemoLogin("google.user@techbazaar.com", "buyer", "Google User");
+      const data = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+      });
+      if (data?.error) {
+        toast.error(data.error.message || "Google sign-in failed");
+        setGoogleLoading(false);
+      }
     } catch (err: any) {
-      console.warn("Google sign-in exception:", err);
-      toast.dismiss(toastId);
-      await handleDemoLogin("google.user@techbazaar.com", "buyer", "Google User");
-    } finally {
+      toast.error(err?.message || "Google sign-in error");
       setGoogleLoading(false);
     }
   };

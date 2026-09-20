@@ -22,56 +22,17 @@ export default function SignUpPage() {
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
-    const toastId = toast.loading("Connecting to Google...");
     try {
-      // 1. Attempt Better-Auth Google Social Sign-In
-      await authClient.signIn.social(
-        { provider: "google", callbackURL: "/dashboard" },
-        {
-          onError: (ctx) => {
-            console.warn("Google OAuth error:", ctx.error);
-          },
-        }
-      );
-
-      // 2. Fallback check: If not redirected after 1.2s, log in via Google User
-      await new Promise((r) => setTimeout(r, 1200));
-      toast.dismiss(toastId);
-
-      const demoEmail = "google.user@techbazaar.com";
-      const demoPassword = "Password123";
-
-      let signInRes = await authClient.signIn.email({ email: demoEmail, password: demoPassword });
-      if (signInRes.error) {
-        await fetch(`${SERVER_URL}/api/users/reset-demo`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: demoEmail }),
-        });
-        await (authClient.signUp.email as any)({
-          email: demoEmail,
-          password: demoPassword,
-          name: "Google User",
-          role: "buyer",
-          plan: "free",
-        });
-        signInRes = await authClient.signIn.email({ email: demoEmail, password: demoPassword });
-      }
-
-      await fetch(`${SERVER_URL}/api/users/ensure-demo`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: demoEmail, role: "buyer" }),
+      const data = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
       });
-
-      toast.success("Signed in with Google!");
-      await new Promise((r) => setTimeout(r, 150));
-      window.location.href = "/dashboard";
+      if (data?.error) {
+        toast.error(data.error.message || "Google sign-in failed");
+        setGoogleLoading(false);
+      }
     } catch (err: any) {
-      console.warn("Google sign-in exception:", err);
-      toast.dismiss(toastId);
-      toast.error("Google sign in failed");
-    } finally {
+      toast.error(err?.message || "Google sign-in error");
       setGoogleLoading(false);
     }
   };

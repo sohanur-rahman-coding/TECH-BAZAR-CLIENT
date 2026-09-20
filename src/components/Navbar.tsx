@@ -103,10 +103,11 @@ const Navbar = () => {
   };
 
   const isActive = (path: string) =>
-    pathname === path || pathname.startsWith(path + "/");
+    path === "/" ? pathname === "/" : pathname === path || pathname.startsWith(path + "/");
 
   /* Nav links */
   const baseLinks = [
+    { label: "Home", href: "/" },
     { label: "Explore", href: "/products" },
     { label: "Pricing", href: "/pricing" },
     { label: "About", href: "/about" },
